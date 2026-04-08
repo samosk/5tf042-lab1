@@ -1,14 +1,22 @@
 is_global = true
 build_property.TargetFramework = net10.0
-build_property.TargetFrameworkIdentifier = .NETCoreApp
-build_property.TargetFrameworkVersion = v10.0
+build_property.TargetFramework = net10.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
 build_property.RootNamespace = BlazorApp
 build_property.RootNamespace = BlazorApp
 build_property.ProjectDir = /Users/samuel/Desktop/5tf042-lab1/BlazorApp/
@@ -26,12 +34,12 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Foretag.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Gb3JldGFnLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Home.razor]
@@ -42,8 +50,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
+[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Prenumerant.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9QcmVudW1lcmFudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Prenumeranter.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9QcmVudW1lcmFudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/RegistreraPrenumerant.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9SZWdpc3RyZXJhUHJlbnVtZXJhbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/SkapaAnnons.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ta2FwYUFubm9ucy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Routes.razor]

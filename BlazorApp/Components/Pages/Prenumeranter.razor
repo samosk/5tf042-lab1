@@ -1,0 +1,57 @@
+@page "/prenumeranter"
+@rendermode InteractiveServer
+@inject PrenumerantApiClient ApiClient
+
+<h2>Prenumeranter</h2>
+
+@if (laddar)
+{
+    <p>Laddar...</p>
+}
+else if (prenumeranter.Count == 0)
+{
+    <p>Inga prenumeranter hittades.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Förnamn</th>
+                <th>Efternamn</th>
+                <th>Personnummer</th>
+                <th>Adress</th>
+                <th>Postnummer</th>
+                <th>Ort</th>
+                <th>Telefon</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in prenumeranter)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Fornamn</td>
+                    <td>@p.Efternamn</td>
+                    <td>@p.Personnummer</td>
+                    <td>@p.Utdelningsadress</td>
+                    <td>@p.Postnummer</td>
+                    <td>@p.Ort</td>
+                    <td>@p.Telefonnummer</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<PrenumerantDto> prenumeranter = new();
+    private bool laddar = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        prenumeranter = await ApiClient.GetAllAsync();
+        laddar = false;
+    }
+}
