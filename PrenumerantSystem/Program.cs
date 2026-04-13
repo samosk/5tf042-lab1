@@ -7,7 +7,18 @@ builder.Services.AddDbContext<PrenumerantContext>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazor", policy =>
+    {
+        policy.WithOrigins("http://localhost:5259")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
+app.UseCors("AllowBlazor");
 app.MapControllers();
 app.Run();

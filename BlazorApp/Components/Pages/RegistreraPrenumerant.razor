@@ -3,53 +3,65 @@
 @inject PrenumerantApiClient ApiClient
 @inject NavigationManager Nav
 
-<h2>Registrera prenumerant</h2>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Registrera prenumerant</h2>
 
-@if (sparad)
-{
-    <div style="color: green">Prenumerant registrerad!</div>
-}
+                    @if (sparad)
+                    {
+                        <div class="alert alert-success">Prenumerant registrerad!</div>
+                    }
 
-@if (felmeddelande is not null)
-{
-    <div style="color: red">@felmeddelande</div>
-}
+                    @if (felmeddelande is not null)
+                    {
+                        <div class="alert alert-danger">@felmeddelande</div>
+                    }
 
-<EditForm Model="formModel" OnValidSubmit="Spara" FormName="registrera-prenumerant">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+                    <EditForm Model="formModel" OnValidSubmit="Spara" FormName="registrera-prenumerant">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
 
-    <div>
-        <label>Personnummer</label>
-        <InputText @bind-Value="formModel.Personnummer" />
-    </div>
-    <div>
-        <label>Förnamn</label>
-        <InputText @bind-Value="formModel.Fornamn" />
-    </div>
-    <div>
-        <label>Efternamn</label>
-        <InputText @bind-Value="formModel.Efternamn" />
-    </div>
-    <div>
-        <label>Utdelningsadress</label>
-        <InputText @bind-Value="formModel.Utdelningsadress" />
-    </div>
-    <div>
-        <label>Postnummer</label>
-        <InputText @bind-Value="formModel.Postnummer" />
-    </div>
-    <div>
-        <label>Ort</label>
-        <InputText @bind-Value="formModel.Ort" />
-    </div>
-    <div>
-        <label>Telefonnummer</label>
-        <InputText @bind-Value="formModel.Telefonnummer" />
-    </div>
+                        <div class="mb-3">
+                            <label class="form-label">Personnummer</label>
+                            <InputText @bind-Value="formModel.Personnummer" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Förnamn</label>
+                            <InputText @bind-Value="formModel.Fornamn" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Efternamn</label>
+                            <InputText @bind-Value="formModel.Efternamn" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Utdelningsadress</label>
+                            <InputText @bind-Value="formModel.Utdelningsadress" class="form-control" />
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label class="form-label">Postnummer</label>
+                                <InputText @bind-Value="formModel.Postnummer" class="form-control" />
+                            </div>
+                            <div class="col-8">
+                                <label class="form-label">Ort</label>
+                                <InputText @bind-Value="formModel.Ort" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Telefonnummer</label>
+                            <InputText @bind-Value="formModel.Telefonnummer" class="form-control" />
+                        </div>
 
-    <button type="submit">Registrera</button>
-</EditForm>
+                        <button type="submit" class="btn btn-primary w-100">Registrera</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     private PrenumerantDto formModel = new();

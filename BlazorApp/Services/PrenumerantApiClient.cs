@@ -8,9 +8,23 @@ public class PrenumerantApiClient
     {
         _http = http;
     }
+
+    public async Task<List<PrenumerantDto>> GetAllAsync()
+    {
+        return await _http.GetFromJsonAsync<List<PrenumerantDto>>("api/prenumerant")
+               ?? new List<PrenumerantDto>();
+    }
+
     public async Task<PrenumerantDto?> GetByIdAsync(int id)
     {
-        return await _http.GetFromJsonAsync<PrenumerantDto>($"api/prenumerant/{id}");
+        try
+        {
+            return await _http.GetFromJsonAsync<PrenumerantDto>($"api/prenumerant/{id}");
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     public async Task<PrenumerantDto?> GetByPrenumerantnummerAsync(int nummer)
@@ -29,7 +43,7 @@ public class PrenumerantApiClient
     {
         try
         {
-            return await _http.GetFromJsonAsync<PrenumerantDto>($"api/prenumerant?personnummer={personnummer}");
+            return await _http.GetFromJsonAsync<PrenumerantDto>($"api/prenumerant/personnummer/{personnummer}");
         }
         catch
         {
@@ -44,8 +58,10 @@ public class PrenumerantApiClient
         return await response.Content.ReadFromJsonAsync<PrenumerantDto>();
     }
 
-    public async Task<List<PrenumerantDto>> GetAllAsync()
+    public async Task<PrenumerantDto?> UpdateAsync(int id, PrenumerantDto dto)
     {
-        return await _http.GetFromJsonAsync<List<PrenumerantDto>>("api/prenumerant") ?? new List<PrenumerantDto>();
+        var response = await _http.PutAsJsonAsync($"api/prenumerant/{id}", dto);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<PrenumerantDto>();
     }
 }

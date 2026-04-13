@@ -12,19 +12,35 @@ public class PrenumerantController : ControllerBase
         _db = db;
     }
 
-    [HttpGet("personnummer/{personnummer}")]
-    public async Task<IActionResult> GetByPersonnummer(string personnummer)
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        var p = await _db.Prenumeranter
-            .FirstOrDefaultAsync(x => x.Personnummer == personnummer);
-        if (p is null) return NotFound();
-        return Ok(p);
+        var prenumeranter = await _db.Prenumeranter.ToListAsync();
+        return Ok(prenumeranter);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var p = await _db.Prenumeranter.FindAsync(id);
+        if (p is null) return NotFound();
+        return Ok(p);
+    }
+
+    [HttpGet("nummer/{nummer}")]
+    public async Task<IActionResult> GetByPrenumerantnummer(int nummer)
+    {
+        var p = await _db.Prenumeranter
+            .FirstOrDefaultAsync(x => x.Prenumerantnummer == nummer);
+        if (p is null) return NotFound();
+        return Ok(p);
+    }
+
+    [HttpGet("personnummer/{personnummer}")]
+    public async Task<IActionResult> GetByPersonnummer(string personnummer)
+    {
+        var p = await _db.Prenumeranter
+            .FirstOrDefaultAsync(x => x.Personnummer == personnummer);
         if (p is null) return NotFound();
         return Ok(p);
     }
@@ -37,19 +53,20 @@ public class PrenumerantController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = prenumerant.Id }, prenumerant);
     }
 
-    [HttpGet("nummer/{nummer}")]
-    public async Task<IActionResult> GetByPrenumerantnummer(int nummer)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, Prenumerant uppdaterad)
     {
-        var p = await _db.Prenumeranter
-            .FirstOrDefaultAsync(x => x.Prenumerantnummer == nummer);
-        if (p is null) return NotFound();
-        return Ok(p);
-    }
+        var befintlig = await _db.Prenumeranter.FindAsync(id);
+        if (befintlig is null) return NotFound();
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var prenumeranter = await _db.Prenumeranter.ToListAsync();
-        return Ok(prenumeranter);
+        befintlig.Fornamn = uppdaterad.Fornamn;
+        befintlig.Efternamn = uppdaterad.Efternamn;
+        befintlig.Utdelningsadress = uppdaterad.Utdelningsadress;
+        befintlig.Postnummer = uppdaterad.Postnummer;
+        befintlig.Ort = uppdaterad.Ort;
+        befintlig.Telefonnummer = uppdaterad.Telefonnummer;
+
+        await _db.SaveChangesAsync();
+        return Ok(befintlig);
     }
 }

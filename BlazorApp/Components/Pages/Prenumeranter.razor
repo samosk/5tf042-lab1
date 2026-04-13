@@ -2,48 +2,54 @@
 @rendermode InteractiveServer
 @inject PrenumerantApiClient ApiClient
 
-<h2>Prenumeranter</h2>
+<div class="container py-4">
+    <h2 class="mb-4">Prenumeranter</h2>
 
-@if (laddar)
-{
-    <p>Laddar...</p>
-}
-else if (prenumeranter.Count == 0)
-{
-    <p>Inga prenumeranter hittades.</p>
-}
-else
-{
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Förnamn</th>
-                <th>Efternamn</th>
-                <th>Personnummer</th>
-                <th>Adress</th>
-                <th>Postnummer</th>
-                <th>Ort</th>
-                <th>Telefon</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var p in prenumeranter)
-            {
-                <tr>
-                    <td>@p.Id</td>
-                    <td>@p.Fornamn</td>
-                    <td>@p.Efternamn</td>
-                    <td>@p.Personnummer</td>
-                    <td>@p.Utdelningsadress</td>
-                    <td>@p.Postnummer</td>
-                    <td>@p.Ort</td>
-                    <td>@p.Telefonnummer</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    @if (laddar)
+    {
+        <p class="text-muted fst-italic">Laddar prenumeranter...</p>
+    }
+    else if (prenumeranter.Count == 0)
+    {
+        <p class="text-muted text-center py-4">Inga prenumeranter hittades.</p>
+    }
+    else
+    {
+        <p class="text-muted small mb-3">@prenumeranter.Count prenumerant@(prenumeranter.Count == 1 ? "" : "er") hittades</p>
+
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Prenr.</th>
+                            <th>Namn</th>
+                            <th>Personnummer</th>
+                            <th>Adress</th>
+                            <th>Ort</th>
+                            <th>Telefon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in prenumeranter)
+                        {
+                            <tr>
+                                <td class="text-muted small">@p.Prenumerantnummer</td>
+                                <td>
+                                    <span class="fw-semibold">@p.Fornamn @p.Efternamn</span>
+                                </td>
+                                <td class="text-muted small">@p.Personnummer</td>
+                                <td class="text-muted small">@p.Utdelningsadress</td>
+                                <td class="text-muted small">@p.Postnummer @p.Ort</td>
+                                <td class="text-muted small">@(p.Telefonnummer ?? "—")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     private List<PrenumerantDto> prenumeranter = new();

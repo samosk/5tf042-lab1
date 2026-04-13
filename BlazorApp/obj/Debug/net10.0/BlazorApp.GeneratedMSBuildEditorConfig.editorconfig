@@ -38,10 +38,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Foretag.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Gb3JldGFnLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -50,12 +46,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Prenumerant.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9QcmVudW1lcmFudC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/Prenumeranter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9QcmVudW1lcmFudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/RedigeraPrenumerant.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9SZWRpZ2VyYVByZW51bWVyYW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/samuel/Desktop/5tf042-lab1/BlazorApp/Components/Pages/RegistreraPrenumerant.razor]

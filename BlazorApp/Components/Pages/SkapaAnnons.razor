@@ -4,154 +4,272 @@
 @inject AnnonsService AnnonsService
 @inject NavigationManager Nav
 
-<h2>Skapa annons</h2>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-@if (sparad)
-{
-    <p style="color: green">Annonsen har sparats!</p>
-}
+            <h2 class="mb-4">Skapa annons</h2>
 
-@if (felmeddelande is not null)
-{
-    <p style="color: red">@felmeddelande</p>
-}
+            @if (sparad)
+            {
+                <div class="alert alert-success">Annonsen har sparats!</div>
+            }
 
-<div>
-    <label>
-        <input type="radio" name="typ" value="prenumerant" checked="@(annonstyp == "prenumerant")"
-               @onchange="@(() => ValjTyp("prenumerant"))" />
-        Prenumerant
-    </label>
-    <label>
-        <input type="radio" name="typ" value="foretag" checked="@(annonstyp == "foretag")"
-               @onchange="@(() => ValjTyp("foretag"))" />
-        Företag
-    </label>
-</div>
+            @if (felmeddelande is not null)
+            {
+                <div class="alert alert-danger">@felmeddelande</div>
+            }
 
-@if (annonstyp == "prenumerant")
-{
-    <div>
-        <label>Prenumerationsnummer</label>
-        <input type="number" @bind="prenumerationsnummer" />
-        <button @onclick="HamtaPrenumerant">Hämta uppgifter</button>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Typ av annonsör</h5>
+                    <div class="d-flex gap-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="typ" id="typPrenumerant"
+                                   checked="@(annonstyp == "prenumerant")"
+                                   @onchange="@(() => ValjTyp("prenumerant"))" />
+                            <label class="form-check-label" for="typPrenumerant">Prenumerant</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="typ" id="typForetag"
+                                   checked="@(annonstyp == "foretag")"
+                                   @onchange="@(() => ValjTyp("foretag"))" />
+                            <label class="form-check-label" for="typForetag">Företag</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (annonstyp == "prenumerant")
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Hämta prenumerantuppgifter</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prenumerationsnummer</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" @bind="prenumerationsnummer" />
+                                <button class="btn btn-primary" @onclick="HamtaPrenumerant">Hämta uppgifter</button>
+                            </div>
+                        </div>
+
+                        @if (soktePrenumerant && hittadPrenumerant is null)
+                        {
+                            <div class="alert alert-warning">Ingen prenumerant hittades med det numret.</div>
+                        }
+
+                        @if (hittadPrenumerant is not null)
+                        {
+                            <div class="alert alert-success">Uppgifter hämtade — ändra vid behov.</div>
+
+                            <EditForm Model="redigeradPrenumerant" FormName="redigera-prenumerant">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label">Förnamn</label>
+                                        <InputText @bind-Value="redigeradPrenumerant.Fornamn" class="form-control" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Efternamn</label>
+                                        <InputText @bind-Value="redigeradPrenumerant.Efternamn" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Utdelningsadress</label>
+                                    <InputText @bind-Value="redigeradPrenumerant.Utdelningsadress" class="form-control" />
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4">
+                                        <label class="form-label">Postnummer</label>
+                                        <InputText @bind-Value="redigeradPrenumerant.Postnummer" class="form-control" />
+                                    </div>
+                                    <div class="col-8">
+                                        <label class="form-label">Ort</label>
+                                        <InputText @bind-Value="redigeradPrenumerant.Ort" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Telefonnummer</label>
+                                    <InputText @bind-Value="redigeradPrenumerant.Telefonnummer" class="form-control" />
+                                </div>
+                            </EditForm>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (annonstyp == "foretag")
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Företagsuppgifter</h5>
+
+                        <EditForm Model="foretagsForm" FormName="foretag-uppgifter">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary class="text-danger" />
+
+                            <div class="mb-3">
+                                <label class="form-label">Företagsnamn</label>
+                                <InputText @bind-Value="foretagsForm.Namn" class="form-control" />
+                                <ValidationMessage For="@(() => foretagsForm.Namn)" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Organisationsnummer</label>
+                                <InputText @bind-Value="foretagsForm.Organisationsnummer" class="form-control" />
+                                <ValidationMessage For="@(() => foretagsForm.Organisationsnummer)" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Telefonnummer</label>
+                                <InputText @bind-Value="foretagsForm.Telefonnummer" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Utdelningsadress</label>
+                                <InputText @bind-Value="foretagsForm.Utdelningsadress" class="form-control" />
+                                <ValidationMessage For="@(() => foretagsForm.Utdelningsadress)" />
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label">Postnummer</label>
+                                    <InputText @bind-Value="foretagsForm.Postnummer" class="form-control" />
+                                    <ValidationMessage For="@(() => foretagsForm.Postnummer)" />
+                                </div>
+                                <div class="col-8">
+                                    <label class="form-label">Ort</label>
+                                    <InputText @bind-Value="foretagsForm.Ort" class="form-control" />
+                                    <ValidationMessage For="@(() => foretagsForm.Ort)" />
+                                </div>
+                            </div>
+
+                            <h6 class="mt-4 mb-3 text-muted">Fakturaadress</h6>
+
+                            <div class="mb-3">
+                                <label class="form-label">Adress</label>
+                                <InputText @bind-Value="foretagsForm.FakturaAdress" class="form-control" />
+                                <ValidationMessage For="@(() => foretagsForm.FakturaAdress)" />
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label">Postnummer</label>
+                                    <InputText @bind-Value="foretagsForm.FakturaPostnummer" class="form-control" />
+                                    <ValidationMessage For="@(() => foretagsForm.FakturaPostnummer)" />
+                                </div>
+                                <div class="col-8">
+                                    <label class="form-label">Ort</label>
+                                    <InputText @bind-Value="foretagsForm.FakturaOrt" class="form-control" />
+                                    <ValidationMessage For="@(() => foretagsForm.FakturaOrt)" />
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            }
+
+            @if (annonstyp is not null && (annonstyp == "foretag" || hittadPrenumerant is not null))
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Annonsinnehåll</h5>
+
+                        <EditForm Model="annonsForm" OnValidSubmit="Spara" FormName="skapa-annons">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary class="text-danger" />
+
+                            <div class="mb-3">
+                                <label class="form-label">Rubrik</label>
+                                <InputText @bind-Value="annonsForm.Rubrik" class="form-control" />
+                                <ValidationMessage For="@(() => annonsForm.Rubrik)" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Innehåll</label>
+                                <InputTextArea @bind-Value="annonsForm.Innehall" class="form-control" rows="4" />
+                                <ValidationMessage For="@(() => annonsForm.Innehall)" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Varupris (kr)</label>
+                                <InputNumber @bind-Value="annonsForm.Varupris" class="form-control" />
+                                <ValidationMessage For="@(() => annonsForm.Varupris)" />
+                            </div>
+
+                            <div class="alert alert-info py-2">
+                                Annonspris: <strong>@(annonstyp == "prenumerant" ? "0 kr (prenumerantrabatt)" : "40 kr")</strong>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Spara annons</button>
+                        </EditForm>
+                    </div>
+                </div>
+            }
+
+        </div>
     </div>
-
-    @if (hittadPrenumerant is not null)
-    {
-        <p style="color: green">Uppgifter hämtade!</p>
-        <p>@hittadPrenumerant.Fornamn @hittadPrenumerant.Efternamn</p>
-        <p>@hittadPrenumerant.Utdelningsadress, @hittadPrenumerant.Postnummer @hittadPrenumerant.Ort</p>
-        <p>@hittadPrenumerant.Telefonnummer</p>
-    }
-    else if (soktePrenumerant)
-    {
-        <p style="color: red">Ingen prenumerant hittades med det numret.</p>
-    }
-}
-
-@if (annonstyp == "foretag")
-{
-    <EditForm Model="foretagsModel" FormName="foretag-uppgifter">
-        <div>
-            <label>Företagsnamn</label>
-            <InputText @bind-Value="foretagsModel.Namn" />
-        </div>
-        <div>
-            <label>Organisationsnummer</label>
-            <InputText @bind-Value="foretagsModel.Organisationsnummer" />
-        </div>
-        <div>
-            <label>Telefonnummer</label>
-            <InputText @bind-Value="foretagsModel.Telefonnummer" />
-        </div>
-        <div>
-            <label>Utdelningsadress</label>
-            <InputText @bind-Value="foretagsModel.Utdelningsadress" />
-        </div>
-        <div>
-            <label>Postnummer</label>
-            <InputText @bind-Value="foretagsModel.Postnummer" />
-        </div>
-        <div>
-            <label>Ort</label>
-            <InputText @bind-Value="foretagsModel.Ort" />
-        </div>
-        <div>
-            <label>Fakturaadress</label>
-            <InputText @bind-Value="foretagsModel.FakturaAdress" />
-        </div>
-        <div>
-            <label>Fakturapostnummer</label>
-            <InputText @bind-Value="foretagsModel.FakturaPostnummer" />
-        </div>
-        <div>
-            <label>Fakturaort</label>
-            <InputText @bind-Value="foretagsModel.FakturaOrt" />
-        </div>
-    </EditForm>
-}
-
-@if (annonstyp is not null && (annonstyp == "foretag" || hittadPrenumerant is not null))
-{
-    <EditForm Model="annonsForm" OnValidSubmit="Spara" FormName="skapa-annons">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div>
-            <label>Rubrik</label>
-            <InputText @bind-Value="annonsForm.Rubrik" />
-        </div>
-        <div>
-            <label>Innehåll</label>
-            <InputTextArea @bind-Value="annonsForm.Innehall" />
-        </div>
-        <div>
-            <label>Varupris (kr)</label>
-            <InputNumber @bind-Value="annonsForm.Varupris" />
-        </div>
-        <p>Annonspris: @(annonstyp == "prenumerant" ? "0 kr (prenumerantrabatt)" : "40 kr")</p>
-
-        <button type="submit">Spara annons</button>
-    </EditForm>
-}
+</div>
 
 @code {
     private string? annonstyp;
     private int prenumerationsnummer;
     private PrenumerantDto? hittadPrenumerant;
+    private PrenumerantDto redigeradPrenumerant = new();
     private bool soktePrenumerant = false;
     private string? felmeddelande;
     private bool sparad = false;
 
     private AdFormModel annonsForm = new();
-    private Annonsor foretagsModel = new() { Typ = "foretag" };
+    private ForetagFormModel foretagsForm = new();
 
     private void ValjTyp(string typ)
     {
         annonstyp = typ;
         hittadPrenumerant = null;
+        redigeradPrenumerant = new();
         soktePrenumerant = false;
         felmeddelande = null;
         sparad = false;
     }
 
-
     private async Task HamtaPrenumerant()
     {
         hittadPrenumerant = null;
         soktePrenumerant = false;
+        redigeradPrenumerant = new();
 
         if (prenumerationsnummer <= 0) return;
 
         hittadPrenumerant = await ApiClient.GetByPrenumerantnummerAsync(prenumerationsnummer);
         soktePrenumerant = true;
+
+        if (hittadPrenumerant is not null)
+        {
+            redigeradPrenumerant = new PrenumerantDto
+            {
+                Id = hittadPrenumerant.Id,
+                Fornamn = hittadPrenumerant.Fornamn,
+                Efternamn = hittadPrenumerant.Efternamn,
+                Utdelningsadress = hittadPrenumerant.Utdelningsadress,
+                Postnummer = hittadPrenumerant.Postnummer,
+                Ort = hittadPrenumerant.Ort,
+                Telefonnummer = hittadPrenumerant.Telefonnummer
+            };
+        }
     }
 
     private async Task Spara()
     {
         sparad = false;
         felmeddelande = null;
+
+        if (annonstyp == "foretag")
+        {
+            var context = new System.ComponentModel.DataAnnotations.ValidationContext(foretagsForm);
+            var results = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            bool valid = System.ComponentModel.DataAnnotations.Validator.TryValidateObject(
+                foretagsForm, context, results, true);
+
+            if (!valid)
+            {
+                felmeddelande = string.Join(", ", results.Select(r => r.ErrorMessage));
+                return;
+            }
+        }
 
         try
         {
@@ -162,24 +280,37 @@
                 annonsor = new Annonsor
                 {
                     Typ = "prenumerant",
-                    PreId = hittadPrenumerant.Id,
-                    Namn = $"{hittadPrenumerant.Fornamn} {hittadPrenumerant.Efternamn}",
-                    Telefonnummer = hittadPrenumerant.Telefonnummer,
-                    Utdelningsadress = hittadPrenumerant.Utdelningsadress,
-                    Postnummer = hittadPrenumerant.Postnummer,
-                    Ort = hittadPrenumerant.Ort
+                    PreId = redigeradPrenumerant.Id,
+                    Namn = $"{redigeradPrenumerant.Fornamn} {redigeradPrenumerant.Efternamn}",
+                    Telefonnummer = redigeradPrenumerant.Telefonnummer,
+                    Utdelningsadress = redigeradPrenumerant.Utdelningsadress,
+                    Postnummer = redigeradPrenumerant.Postnummer,
+                    Ort = redigeradPrenumerant.Ort
                 };
             }
             else
             {
-                annonsor = foretagsModel;
+                annonsor = new Annonsor
+                {
+                    Typ = "foretag",
+                    Namn = foretagsForm.Namn,
+                    Organisationsnummer = foretagsForm.Organisationsnummer,
+                    Telefonnummer = foretagsForm.Telefonnummer,
+                    Utdelningsadress = foretagsForm.Utdelningsadress,
+                    Postnummer = foretagsForm.Postnummer,
+                    Ort = foretagsForm.Ort,
+                    FakturaAdress = foretagsForm.FakturaAdress,
+                    FakturaPostnummer = foretagsForm.FakturaPostnummer,
+                    FakturaOrt = foretagsForm.FakturaOrt
+                };
             }
 
             await AnnonsService.SparaAnnonsAsync(annonsor, annonsForm);
             sparad = true;
             annonsForm = new();
-            foretagsModel = new() { Typ = "foretag" };
+            foretagsForm = new();
             hittadPrenumerant = null;
+            redigeradPrenumerant = new();
             prenumerationsnummer = 0;
         }
         catch (Exception ex)

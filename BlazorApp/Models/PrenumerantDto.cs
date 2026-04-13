@@ -3,12 +3,11 @@ using System.ComponentModel.DataAnnotations;
 public class PrenumerantDto
 {
     public int Id { get; set; }
+    public int Prenumerantnummer { get; set; }
 
     [Required(ErrorMessage = "Personnummer krävs")]
     [MaxLength(13)]
     public string Personnummer { get; set; } = string.Empty;
-
-    public int Prenumerantnummer { get; set; }
 
     [Required(ErrorMessage = "Förnamn krävs")]
     public string Fornamn { get; set; } = string.Empty;

@@ -1,0 +1,128 @@
+@page "/redigera-prenumerant"
+@rendermode InteractiveServer
+@inject PrenumerantApiClient ApiClient
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Redigera prenumerant</h2>
+
+                    @if (sparad)
+                    {
+                        <div class="alert alert-success">Uppgifterna har sparats!</div>
+                    }
+
+                    @if (felmeddelande is not null)
+                    {
+                        <div class="alert alert-danger">@felmeddelande</div>
+                    }
+
+                    @if (prenumerant is null)
+                    {
+                        <div class="mb-3">
+                            <label class="form-label">Prenumerationsnummer</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" @bind="prenumerationsnummer" />
+                                <button class="btn btn-primary" @onclick="HamtaPrenumerant">Hämta uppgifter</button>
+                            </div>
+                        </div>
+
+                        @if (inteHittad)
+                        {
+                            <div class="alert alert-warning">Ingen prenumerant hittades med det numret.</div>
+                        }
+                    }
+                    else
+                    {
+                        <EditForm Model="prenumerant" OnValidSubmit="Spara" FormName="redigera-prenumerant">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary class="text-danger" />
+
+                            <div class="mb-3">
+                                <label class="form-label">Förnamn</label>
+                                <InputText @bind-Value="prenumerant.Fornamn" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Efternamn</label>
+                                <InputText @bind-Value="prenumerant.Efternamn" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Utdelningsadress</label>
+                                <InputText @bind-Value="prenumerant.Utdelningsadress" class="form-control" />
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label">Postnummer</label>
+                                    <InputText @bind-Value="prenumerant.Postnummer" class="form-control" />
+                                </div>
+                                <div class="col-8">
+                                    <label class="form-label">Ort</label>
+                                    <InputText @bind-Value="prenumerant.Ort" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Telefonnummer</label>
+                                <InputText @bind-Value="prenumerant.Telefonnummer" class="form-control" />
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary w-100">Spara ändringar</button>
+                                <button type="button" class="btn btn-outline-secondary w-100" @onclick="Avbryt">Avbryt</button>
+                            </div>
+                        </EditForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int prenumerationsnummer;
+    private PrenumerantDto? prenumerant;
+    private bool inteHittad = false;
+    private bool sparad = false;
+    private string? felmeddelande;
+
+    private async Task HamtaPrenumerant()
+    {
+        inteHittad = false;
+        sparad = false;
+        felmeddelande = null;
+        prenumerant = null;
+
+        if (prenumerationsnummer <= 0) return;
+
+        prenumerant = await ApiClient.GetByPrenumerantnummerAsync(prenumerationsnummer);
+
+        if (prenumerant is null)
+            inteHittad = true;
+    }
+
+    private async Task Spara()
+    {
+        sparad = false;
+        felmeddelande = null;
+
+        try
+        {
+            await ApiClient.UpdateAsync(prenumerant!.Id, prenumerant);
+            sparad = true;
+        }
+        catch (Exception ex)
+        {
+            felmeddelande = $"Något gick fel: {ex.Message}";
+        }
+    }
+
+    private void Avbryt()
+    {
+        prenumerant = null;
+        prenumerationsnummer = 0;
+        inteHittad = false;
+        sparad = false;
+        felmeddelande = null;
+    }
+}
